@@ -46,8 +46,8 @@ app.use(xss());
 // routes
 app.get("/", (req,res)=>res.send("<h1>PERSONAL FINANCE TRACKER API<h1>"));
 app.use("/api/v1/auth",authRouter);
-app.use("/api/v1/expenses",expenseRouter);
-app.use("/api/v1/incomes",incomeRouter);
+app.use("/api/v1/expenses",authenticateUser, expenseRouter);
+app.use("/api/v1/incomes",authenticateUser, incomeRouter);
 
 // more middlewares
 app.use(notFoundMiddleware);
