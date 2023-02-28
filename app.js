@@ -22,6 +22,7 @@ const authenticateUser = require("./middleware/authentication");
 
 // routers
 const authRouter = require("./routes/auth");
+const expenseRouter = require("./routes/expense");
 
 // swagger
 
@@ -44,7 +45,7 @@ app.use(xss());
 // routes
 app.get("/", (req,res)=>res.send("<h1>PERSONAL FINANCE TRACKER API<h1>"));
 app.use("/api/v1/auth",authRouter);
-
+app.use("/api/v1/expenses",expenseRouter);
 // more middlewares
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
