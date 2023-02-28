@@ -24,6 +24,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true,"Must Provied a Password"],
         minlength: 6
+    },
+    balance: {
+        type: Number,
+        default: 0
     }
 })
 
