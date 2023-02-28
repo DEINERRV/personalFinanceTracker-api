@@ -87,15 +87,18 @@ const createExpense = async(req,res)=>{
     //Update the user balance
     const user = await User.findOne({_id: req.user.id}).select("balance")
     await User.findOneAndUpdate({_id: req.user.id},{balance: user.balance-expense.amount})
-    
+
     res.status(StatusCodes.CREATED).json(expense)
 }
 
 const deleteExpense = async(req,res)=>{
+    //Delete
     const expense = await Expense.findOneAndDelete({_id: req.params.id, expenseOwner: req.user.id})
     if(!expense)
         throw new BadRequestError(`No expense with id: ${req.params.id}`)
-    
+    //Update the user balance
+    const user = await User.findOne({_id: req.user.id}).select("balance")
+    await User.findOneAndUpdate({_id: req.user.id},{balance: user.balance+expense.amount})
     res.status(StatusCodes.OK).json(expense)
 }
 
