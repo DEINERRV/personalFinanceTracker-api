@@ -1,4 +1,5 @@
 const Expense = require("../models/Expense");
+const User = require("../models/User");
 const {StatusCodes} = require("http-status-codes");
 const {BadRequestError} = require("../errors/");
 
@@ -80,8 +81,13 @@ const getExpense = async(req,res)=>{
 }
 
 const createExpense = async(req,res)=>{
+    //Save
     req.body.expenseOwner = req.user.id
     const expense = await Expense.create(req.body)
+    //Update the user balance
+    const user = await User.findOne({_id: req.user.id}).select("balance")
+    await User.findOneAndUpdate({_id: req.user.id},{balance: user.balance-expense.amount})
+    
     res.status(StatusCodes.CREATED).json(expense)
 }
 
