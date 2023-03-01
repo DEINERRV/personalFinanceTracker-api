@@ -4,7 +4,7 @@ const ExpenseSchema = new mongoose.Schema({
     name:{
         required: [true,"Must Provide a Name"],
         type: String,
-        maxlength: [10, "Must Provide a Short Name"],
+        maxlength: [20, "Must Provide a Short Name"],
         trim: true
     },
     amount:{
