@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const IncomeSchema = new mongoose.Schema({
     name:{
         required: [true,"Must Provide a Name"],
-        maxlength: [10, "Must Provide a Shorter Name"],
+        maxlength: [20, "Must Provide a Shorter Name"],
         type: String,
         trim: true,
     },
