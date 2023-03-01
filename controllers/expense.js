@@ -103,16 +103,24 @@ const deleteExpense = async(req,res)=>{
 }
 
 const updateExpense = async(req,res)=>{
-    const {name,amount,} = req.body
+    const {name,amount} = req.body
 
     if(!name || !amount || name=="")
         throw new BadRequestError("Name and Amount can not be empty")
     
+    //Expense before update
+    const oldExpense = await Expense.findOne({_id: req.params.id}).select("amount")
+    
+    //Update
     req.body.expenseOwner = req.user.id
     const expense = await Expense.findOneAndUpdate({_id:req.params.id, expenseOwner: req.user.id},req.body,{
         new: true,
         runValidators: true
     })
+
+    //Update the user balance
+    const user = await User.findOne({_id: req.user.id}).select("balance")
+    await User.findOneAndUpdate({_id: req.user.id},{balance: (user.balance+oldExpense.amount)-expense.amount})
 
     res.status(StatusCodes.OK).json(expense)
 }
