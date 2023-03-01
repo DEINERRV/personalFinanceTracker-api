@@ -32,8 +32,23 @@ const UserSchema = new mongoose.Schema({
 })
 
 UserSchema.pre("save",async function(){
+    //Encrypt the password
     const salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password,salt)
+    //Round the balance
+    this.balance = Number.parseFloat(this.balance).toFixed(2);
+})
+
+UserSchema.pre("findOneAndUpdate",async function(){
+    //Encrypt the password
+    if(this._update.password){
+        const salt = await bcrypt.genSalt(10)
+        this._update.password = await bcrypt.hash(this._update.password,salt)
+    }
+    //Round the balance
+    if(this._update.balance)
+        this._update.balance = Number.parseFloat(this._update.balance).toFixed(2);
+
 })
 
 UserSchema.methods.createJWT = function(){
